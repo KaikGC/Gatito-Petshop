@@ -1,0 +1,75 @@
+table Produtos
+	lineageTag: 3ff42879-8356-4386-a0e5-7d4d9a2674b1
+
+	column 'ID Produto'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9562b3c3-766c-48c2-ae95-3f306e149ff2
+		summarizeBy: none
+		sourceColumn: ID Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nome produto'
+		dataType: string
+		lineageTag: 84e381cd-4ca5-4e1c-a272-e0d6b0e55e46
+		summarizeBy: none
+		sourceColumn: Nome produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Categoria
+		dataType: string
+		lineageTag: b0ed3df9-fa15-431b-a517-d6895c1c8fb8
+		summarizeBy: none
+		sourceColumn: Categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column Marca
+		dataType: string
+		lineageTag: 8117e8d9-3a81-44e6-a918-fd1c58631b7e
+		summarizeBy: none
+		sourceColumn: Marca
+
+		annotation SummarizationSetBy = Automatic
+
+	column Valor
+		dataType: decimal
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 654c7de5-cddc-4f9a-b57b-9f0ee869beff
+		summarizeBy: none
+		sourceColumn: Valor
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column 'Url img'
+		dataType: string
+		lineageTag: 5702955b-6dfb-45ed-8133-f575476eb411
+		summarizeBy: none
+		sourceColumn: Url img
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Produtos = m
+		mode: import
+		source =
+				let
+				    Fonte = Excel.Workbook(File.Contents("C:\Users\kaikg\Downloads\Alura\PowerBI-PrimeiroDashboard-Aula1-Material\base\Produtos_gatitos.xlsx"), null, true),
+				    Página1_Sheet = Fonte{[Item="Página1",Kind="Sheet"]}[Data],
+				    #"Colunas Removidas" = Table.RemoveColumns(Página1_Sheet,{"Column7", "Column8", "Column9", "Column10", "Column11", "Column12"}),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(#"Colunas Removidas", [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID Produto", Int64.Type}, {"Nome produto", type text}, {"Categoria", type text}, {"Marca", type text}, {"Valor", Currency.Type}, {"Url img", type text}}),
+				    #"Linhas Inferiores Removidas" = Table.RemoveLastN(#"Tipo Alterado",2),
+				    #"Linhas Inferiores Removidas1" = Table.RemoveLastN(#"Linhas Inferiores Removidas",5),
+				    #"Linhas Inferiores Removidas2" = Table.RemoveLastN(#"Linhas Inferiores Removidas1",1),
+				    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Linhas Inferiores Removidas2",{{"Valor", Currency.Type}, {"Marca", type text}})
+				in
+				    #"Tipo Alterado1"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

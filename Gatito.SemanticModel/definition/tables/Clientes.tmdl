@@ -1,0 +1,60 @@
+table Clientes
+	lineageTag: 95aeb4cf-805f-4199-9122-209c0b366c1f
+
+	column 'ID Consumidor'
+		dataType: int64
+		formatString: 0
+		lineageTag: a124780c-356e-438f-b04d-fa111d167698
+		summarizeBy: none
+		sourceColumn: ID Consumidor
+
+		annotation SummarizationSetBy = Automatic
+
+	column Gênero
+		dataType: string
+		lineageTag: 906228a0-48ad-4c4e-9389-31fc923edbb7
+		summarizeBy: none
+		sourceColumn: Gênero
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Estado civil'
+		dataType: string
+		lineageTag: 164d3677-bfbb-4287-a064-7a77fb5a4a61
+		summarizeBy: none
+		sourceColumn: Estado civil
+
+		annotation SummarizationSetBy = Automatic
+
+	column Pets
+		dataType: int64
+		formatString: 0
+		lineageTag: 5467642d-3e35-4680-a267-47b390553e4c
+		summarizeBy: average
+		sourceColumn: Pets
+
+		annotation SummarizationSetBy = User
+
+	column Bairro
+		dataType: string
+		lineageTag: 6013fed6-be2c-493a-830b-9ed2d18af471
+		summarizeBy: none
+		sourceColumn: Bairro
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Clientes = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\Users\kaikg\Downloads\Alura\PowerBI-PrimeiroDashboard-Aula1-Material\base\Clientes.txt"),[Delimiter="	", Columns=5, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Cabeçalhos Promovidos",{{"ID Consumidor", Int64.Type}, {"Gênero", type text}, {"Estado civil", type text}, {"Pets", Int64.Type}, {"Bairro", type text}}),
+				    #"Linhas Filtradas" = Table.SelectRows(#"Tipo Alterado", each [ID Consumidor] <> null and [ID Consumidor] <> "")
+				in
+				    #"Linhas Filtradas"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

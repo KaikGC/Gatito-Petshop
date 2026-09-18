@@ -1,0 +1,79 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
+  "name": "fc2c89530b0280c04033",
+  "position": {
+    "x": 1300.7881773399015,
+    "y": 232.75862068965517,
+    "z": 8000,
+    "height": 806.00985221674875,
+    "width": 586.551724137931,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "ImageGrid_FC5183B9_926C_45E0_B5F7_0CE9EAF1DA9B",
+    "query": {
+      "queryState": {
+        "ImageURL": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Produtos"
+                    }
+                  },
+                  "Property": "Url img"
+                }
+              },
+              "queryRef": "Produtos.Url img",
+              "nativeQueryRef": "Url img"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

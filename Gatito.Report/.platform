@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Gatito"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "7749845d-926b-4459-addb-3bb25e17ed60"
+  }
+}

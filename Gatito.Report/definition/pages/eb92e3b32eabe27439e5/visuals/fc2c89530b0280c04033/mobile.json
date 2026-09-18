@@ -1,0 +1,28 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainerMobileState/2.7.0/schema.json",
+  "position": {
+    "x": 0,
+    "y": 1401,
+    "z": 9,
+    "height": 291,
+    "width": 324
+  },
+  "visualContainerObjects": {
+    "background": [],
+    "title": [],
+    "border": [],
+    "padding": [
+      {
+        "properties": {
+          "top": {
+            "expr": {
+              "Literal": {
+                "Value": "16D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+relationship 48397eb1-cbae-4e84-800b-788831c0e778
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Vendas.'Data de compra'
+	toColumn: LocalDateTable_0d1bbbd3-8440-4697-8e81-917386ce6b43.Date
+
+relationship AutoDetected_1ed6f150-f656-4b50-89c4-033c51c74372
+	fromColumn: Vendas.'ID Produto'
+	toColumn: Produtos.'ID Produto'
+
+relationship ee277eb3-2c75-4e63-8eb4-697e4091d8bb
+	fromColumn: Vendas.'ID Consumidor'
+	toColumn: Clientes.'ID Consumidor'
+

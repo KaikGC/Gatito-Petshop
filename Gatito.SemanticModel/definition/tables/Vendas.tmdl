@@ -1,0 +1,100 @@
+table Vendas
+	lineageTag: 0113aada-12f0-471a-9e76-7ba64196d1a1
+
+	measure 'Faturamento total' = SUM('Vendas'[Faturamento])
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: e8521147-f875-4b45-9974-483d14076fd6
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Transacao
+		dataType: int64
+		formatString: 0
+		lineageTag: 9e5f76f3-0a2b-4bbc-9b9d-76f9819075f8
+		summarizeBy: sum
+		sourceColumn: Transacao
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Data de compra'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 6088cc42-dc76-4b5b-a61a-afd58a9bb7cc
+		summarizeBy: none
+		sourceColumn: Data de compra
+
+		variation Variation
+			isDefault
+			relationship: 48397eb1-cbae-4e84-800b-788831c0e778
+			defaultHierarchy: LocalDateTable_0d1bbbd3-8440-4697-8e81-917386ce6b43.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'ID Consumidor'
+		dataType: int64
+		formatString: 0
+		lineageTag: 9048cc3e-226c-45d2-a52a-909f8abcb15f
+		summarizeBy: none
+		sourceColumn: ID Consumidor
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ID Produto'
+		dataType: int64
+		formatString: 0
+		lineageTag: 4d0521a3-9963-4315-9820-aa53aa4f0f82
+		summarizeBy: none
+		sourceColumn: ID Produto
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantidade
+		dataType: int64
+		formatString: 0
+		lineageTag: f1497dee-6123-4c81-8768-103ced3e0a10
+		summarizeBy: sum
+		sourceColumn: Quantidade
+
+		annotation SummarizationSetBy = Automatic
+
+	column Valor_unitario = ```
+			RELATED(Produtos[Valor]) 
+			```
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: 1498bef4-ac68-4faa-844a-359148357c66
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	column Faturamento = 'Vendas'[Quantidade] * 'Vendas'[Valor_unitario]
+		formatString: "R$"\ #,0.###############;-"R$"\ #,0.###############;"R$"\ #,0.###############
+		lineageTag: fb15aeed-ae45-4ebc-b4f5-ebdc39c7d96f
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"pt-BR"}
+
+	partition Vendas = m
+		mode: import
+		source =
+				let
+				    Fonte = Folder.Files("C:\Users\kaikg\Downloads\Alura\PowerBI-PrimeiroDashboard-Aula1-Material\base\Vendas"),
+				    #"Arquivos Ocultos Filtrados1" = Table.SelectRows(Fonte, each [Attributes]?[Hidden]? <> true),
+				    #"Invocar Função Personalizada1" = Table.AddColumn(#"Arquivos Ocultos Filtrados1", "Transformar Arquivo", each #"Transformar Arquivo"([Content])),
+				    #"Colunas Renomeadas1" = Table.RenameColumns(#"Invocar Função Personalizada1", {"Name", "Nome da Origem"}),
+				    #"Outras Colunas Removidas1" = Table.SelectColumns(#"Colunas Renomeadas1", {"Nome da Origem", "Transformar Arquivo"}),
+				    #"Coluna de Tabela Expandida1" = Table.ExpandTableColumn(#"Outras Colunas Removidas1", "Transformar Arquivo", Table.ColumnNames(#"Transformar Arquivo"(#"Arquivo de Amostra"))),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Coluna de Tabela Expandida1",{{"Nome da Origem", type text}, {"Transacao", Int64.Type}, {"Data de compra", type date}, {"ID Consumidor", Int64.Type}, {"ID Produto", Int64.Type}, {"Quantidade", Int64.Type}}),
+				    #"Colunas Removidas" = Table.RemoveColumns(#"Tipo Alterado",{"Nome da Origem"})
+				in
+				    #"Colunas Removidas"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

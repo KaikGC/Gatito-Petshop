@@ -1,0 +1,43 @@
+expression Parâmetro1 = #"Arquivo de Amostra" meta [IsParameterQuery=true, BinaryIdentifier=#"Arquivo de Amostra", Type="Binary", IsParameterQueryRequired=true]
+	lineageTag: bedbd6dd-eb72-4226-95b2-aec7e6ae62ab
+	queryGroup: 'Transformar Arquivo de Vendas\Consultas Auxiliares'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transformar o Arquivo de Exemplo' =
+		let
+		    Fonte = Excel.Workbook(Parâmetro1, null, true),
+		    Vendas_Table = Fonte{[Item="Vendas",Kind="Table"]}[Data]
+		in
+		    Vendas_Table
+	lineageTag: 944bd441-287f-4425-8d84-9bc28183003e
+	queryGroup: 'Transformar Arquivo de Vendas'
+
+	annotation PBI_ResultType = Table
+
+expression 'Arquivo de Amostra' =
+		let
+		    Fonte = Folder.Files("C:\Users\kaikg\Downloads\Alura\PowerBI-PrimeiroDashboard-Aula1-Material\base\Vendas"),
+		    Navegação1 = Fonte{0}[Content]
+		in
+		    Navegação1
+	lineageTag: 7756eb6e-7af5-496f-871b-e2fa36fc4319
+	queryGroup: 'Transformar Arquivo de Vendas\Consultas Auxiliares'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transformar Arquivo' =
+		let
+		    Fonte = (Parâmetro1 as binary) => let
+		    Fonte = Excel.Workbook(Parâmetro1, null, true),
+		    Vendas_Table = Fonte{[Item="Vendas",Kind="Table"]}[Data]
+		in
+		    Vendas_Table
+		in
+		    Fonte
+	mAttributes: [ FunctionQueryBinding = "{""exemplarFormulaName"":""Transformar o Arquivo de Exemplo""}" ]
+	lineageTag: 44bf53af-d329-4afe-a77e-6d41a1424821
+	queryGroup: 'Transformar Arquivo de Vendas\Consultas Auxiliares'
+
+	annotation PBI_ResultType = Function
+
